@@ -2,14 +2,14 @@
 
 ## Phase 1 · Repository inspection and architecture
 
-**Status** — Draft complete on `feature/architecture`. Course review and user approval are pending.
+**Status** — Completed on `feature/architecture` and merged into `main` at `9d0c239`.
 
 - Read the local `AGENTS.md`, inspected the repository structure, starter code, package manifests and installed versions, route table, database configuration and migration status, frontend and test setup.
 - Confirmed `AGENTS.md` is ignored and untracked. The path-scoped `.ai/rules` directory is absent.
 - Drafted the MVP scope, schema and relationships, routes, controllers, authorization, booking transitions, test strategy and nine-phase implementation plan. Changes are limited to the four requested Markdown files.
-- Searched the checkout, nearby directories and available Git history for `docs/course-reference/`. No course sections were found. All 12 remain to be read and mapped to requirements. Supply the materials and review any resulting changes before approving Phase 1.
+- The user confirmed there are no course references. The architecture is based on the project instructions and MVP brief.
 
-## Verification
+### Verification
 
 | Check | Result |
 | --- | --- |
@@ -19,6 +19,29 @@
 | `php artisan migrate:status --no-interaction` | All three starter migrations had run. |
 | `vendor/bin/pest --compact` | Two starter tests passed with two assertions. Artisan's test wrapper forwarded `--no-interaction` to PHPUnit, which rejected it, so Pest was run directly. |
 
-## Commits and next milestone
+### Commit
 
-No phase commit or merge has been confirmed. Reconcile the draft with the course references and obtain approval before closing Phase 1. The next implementation milestone is the database schema on `feature/02-database`, after the approved Phase 1 changes merge into `main`.
+- `5d1457e` — Requirements, architecture and implementation plan.
+
+## Phase 2 · Database
+
+**Status** — Implementation complete and verified on `feature/database`. Documentation commit and merge into `main` are pending.
+
+| Milestone | Commit | Delivered |
+| --- | --- | --- |
+| Schema | `85776f0` | Admin flag, categories, services, bookings and reviews. Added indexes, restrictive foreign keys, unique category slugs and one review per booking, and price and rating constraints. |
+| Models and relationships | `0cc8e23` | Eloquent models, customer and provider relationships, booking status enum and attribute casts. |
+| Factories and seeders | `eb9add2` | Factories for the marketplace models, six default categories and linked demo data for local and testing environments. |
+
+### Verification
+
+| Check | Result |
+| --- | --- |
+| `vendor/bin/pest --compact` | 16 tests passed with 102 assertions, covering schema constraints, relationships, casts and seed behavior. |
+| `vendor/bin/pint --format agent` | Passed. |
+| `php artisan migrate --seed --no-interaction` and `php artisan db:seed --no-interaction` | Passed on a fresh temporary SQLite database. All eight migrations ran, and repeat seeding completed successfully. |
+| Schema rollback and reapply | Passed on temporary SQLite during the schema milestone. The three starter migrations remained in place. |
+
+### Next phase
+
+Phase 3 adds authentication and authorization on `feature/03-auth`. Start after the Phase 2 branch is merged into `main` and the user opens Phase 3.
