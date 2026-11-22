@@ -70,5 +70,7 @@
 - Added keyword search across titles and descriptions, combined filtering, and public service detail pages with price, duration, location, provider, optional image and visible reviews. Older listings can have missing duration or location until edited.
 - Search and service details commit: `d929a80`.
 - Added the authenticated provider dashboard and owner-only creation, editing, publication, deactivation and deletion. New services start as drafts. Deactivation keeps a listing editable. Deletion archives it to preserve booking history.
-- Next milestone adds validated service image upload, replacement and cleanup. Booking submission stays outside this phase.
-- The course Media Files section is unavailable in this checkout. Image upload and deletion choices will be documented in the provider milestone.
+- Provider management commit `47116a3`.
+- Added optional cover upload, replacement and removal through the authorized service form. The archive action clears the cover reference and removes the stored file. Image replacement preserves the previous cover until the new reference is saved.
+- The course Media Files section is unavailable. This implementation uses Laravel’s existing public disk with generated filenames under `storage/app/public/services`. Run `php artisan storage:link` in each checkout so browsers can access covers. JPEG, PNG and WebP are supported up to 5 MB and 4096 × 4096 pixels.
+- Booking submission stays outside this phase. Phase closeout follows after the image milestone commit.

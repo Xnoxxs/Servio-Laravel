@@ -9,7 +9,11 @@ use App\Models\Service;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
+use RuntimeException;
+use Throwable;
 
 class ServiceController extends Controller
 {
@@ -76,7 +80,15 @@ class ServiceController extends Controller
     {
         Gate::authorize('delete', $service);
 
-        $service->forceFill(['is_published' => false, 'archived_at' => now()])->save();
+        $updated = $service->newQuery()
+            ->whereKey($service->id)
+            ->whereNull('archived_at')
+            ->where('image_path', $service->image_path)
+            ->update(['is_published' => false, 'archived_at' => now(), 'image_path' => null]);
+
+        abort_unless($updated, 409, 'The service changed. Refresh and try again.');
+
+        $this->deleteImage($service->image_path);
 
         return to_route('provider.dashboard')->with('status', 'Service deleted from your listings.');
     }
@@ -86,6 +98,60 @@ class ServiceController extends Controller
         $service->fill($request->safe()->only(['title', 'description', 'duration_minutes', 'location']));
         $service->category()->associate($request->validated('category_id'));
         $service->price_cents = $request->priceInCents();
-        $service->save();
+        $previousImage = $service->image_path;
+        $newImage = null;
+        $removeImage = $request->boolean('remove_image');
+
+        if ($request->hasFile('image')) {
+            $newImage = $request->file('image')->store('services', 'public');
+
+            if ($newImage === false) {
+                throw ValidationException::withMessages(['image' => 'The image could not be saved. Please try again.']);
+            }
+        }
+
+        if ($newImage !== null || $removeImage) {
+            $service->image_path = $newImage;
+        }
+
+        try {
+            if ($service->exists) {
+                $changes = $service->getDirty();
+                if ($changes !== []) {
+                    $query = $service->newQuery()->whereKey($service->id)->whereNull('archived_at');
+
+                    if ($newImage !== null || $removeImage) {
+                        $query->where('image_path', $previousImage);
+                    }
+
+                    abort_unless($query->update($changes), 409, 'The service changed. Refresh and try again.');
+                }
+            } else {
+                $service->save();
+            }
+        } catch (Throwable $exception) {
+            $this->deleteImage($newImage);
+
+            throw $exception;
+        }
+
+        if ($previousImage !== $service->image_path) {
+            $this->deleteImage($previousImage);
+        }
+    }
+
+    private function deleteImage(?string $path): void
+    {
+        if ($path === null || ! str_starts_with($path, 'services/')) {
+            return;
+        }
+
+        try {
+            if (! Storage::disk('public')->delete($path)) {
+                report(new RuntimeException('Could not delete a service image from the public disk.'));
+            }
+        } catch (Throwable $exception) {
+            report($exception);
+        }
     }
 }

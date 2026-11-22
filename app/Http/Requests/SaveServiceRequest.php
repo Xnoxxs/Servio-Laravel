@@ -6,6 +6,7 @@ use App\Models\Service;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\File;
 
 class SaveServiceRequest extends FormRequest
 {
@@ -28,6 +29,13 @@ class SaveServiceRequest extends FormRequest
             'price' => ['required', 'regex:/\A[0-9]{1,7}(?:[.,][0-9]{1,2})?\z/'],
             'duration_minutes' => ['required', 'integer', 'min:1', 'max:10080'],
             'location' => ['required', 'string', 'max:255'],
+            'image' => [
+                'nullable',
+                'prohibits:remove_image',
+                File::image()->max(5120)->dimensions(Rule::dimensions()->maxWidth(4096)->maxHeight(4096)),
+                'mimes:jpeg,jpg,png,webp',
+            ],
+            'remove_image' => ['sometimes', 'accepted'],
         ];
     }
 

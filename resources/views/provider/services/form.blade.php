@@ -8,7 +8,7 @@
                 <x-marketplace-empty title="No categories available" message="A category must be available before you can save a service." />
             </div>
         @else
-            <form method="POST" action="{{ $service->exists ? route('provider.services.update', $service) : route('provider.services.store') }}" class="mt-6 space-y-5 rounded-2xl border border-stone-200 bg-white p-5 sm:p-8">
+            <form method="POST" enctype="multipart/form-data" action="{{ $service->exists ? route('provider.services.update', $service) : route('provider.services.store') }}" class="mt-6 space-y-5 rounded-2xl border border-stone-200 bg-white p-5 sm:p-8">
                 @csrf
                 @if ($service->exists)
                     @method('PUT')
@@ -37,6 +37,25 @@
                     <x-service-field name="duration_minutes" label="Duration in minutes" :value="$service->duration_minutes" type="number" min="1" max="10080" required />
                 </div>
                 <x-service-field name="location" label="Location" :value="$service->location" maxlength="255" placeholder="City or service area" required />
+
+                <div class="border-t border-stone-200 pt-5">
+                    <label for="image" class="block text-sm font-semibold">Cover image</label>
+                    <p id="image-help" class="mt-1 text-sm text-stone-600">JPEG, PNG or WebP up to 5 MB and 4096 × 4096 pixels.</p>
+                    @if ($service->image_path)
+                        <img src="{{ Storage::disk('public')->url($service->image_path) }}" alt="Current service cover" class="mt-3 aspect-video w-full max-w-xs rounded-xl object-cover">
+                        <label class="mt-3 flex items-center gap-2 text-sm">
+                            <input type="checkbox" name="remove_image" value="1" @checked(old('remove_image')) class="accent-emerald-800">
+                            Remove current image
+                        </label>
+                    @endif
+                    <input id="image" name="image" type="file" accept="image/jpeg,image/png,image/webp"
+                        aria-describedby="image-help @error('image') image-error @enderror"
+                        @error('image') aria-invalid="true" @enderror
+                        class="mt-3 block w-full text-sm file:mr-3 file:rounded-full file:border-0 file:bg-emerald-100 file:px-4 file:py-2 file:font-semibold file:text-emerald-900">
+                    @error('image')
+                        <p id="image-error" class="mt-1 text-sm text-red-700">{{ $message }}</p>
+                    @enderror
+                </div>
 
                 <x-button>{{ $service->exists ? 'Save changes' : 'Create draft' }}</x-button>
             </form>

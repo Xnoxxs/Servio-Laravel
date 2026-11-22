@@ -5,6 +5,8 @@ use App\Models\Category;
 use App\Models\Service;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 uses(RefreshDatabase::class);
 
@@ -131,3 +133,75 @@ test('other members and administrators cannot use owner modification routes', fu
     'member' => [false],
     'administrator' => [true],
 ]);
+
+test('providers can upload, replace and remove a service cover', function () {
+    $disk = Storage::fake('public');
+    $provider = User::factory()->create();
+    $category = Category::factory()->create();
+    $details = [
+        'title' => 'Window cleaning',
+        'category_id' => $category->id,
+        'description' => 'Clean interior windows.',
+        'price' => '40',
+        'duration_minutes' => 60,
+        'location' => 'Madrid',
+    ];
+
+    $this->actingAs($provider)->post(route('provider.services.store'), $details + [
+        'image' => UploadedFile::fake()->image('cover.jpg'),
+    ])->assertRedirect(route('provider.dashboard'));
+
+    $service = $provider->services()->sole();
+    $original = $service->image_path;
+    expect($original)->toStartWith('services/');
+    $disk->assertExists($original);
+
+    $this->get(route('provider.services.edit', $service))->assertOk()->assertSee($original);
+    $this->put(route('provider.services.update', $service), $details + [
+        'image' => UploadedFile::fake()->image('replacement.png'),
+    ])->assertRedirect(route('provider.dashboard'));
+
+    $replacement = $service->refresh()->image_path;
+    expect($replacement)->not->toBe($original);
+    $disk->assertExists($replacement);
+    $disk->assertMissing($original);
+
+    $this->put(route('provider.services.update', $service), $details + ['remove_image' => '1'])
+        ->assertRedirect(route('provider.dashboard'));
+
+    expect($service->refresh()->image_path)->toBeNull();
+    $disk->assertMissing($replacement);
+});
+
+test('an invalid upload leaves the existing cover intact', function () {
+    $disk = Storage::fake('public');
+    $disk->put('services/cover.jpg', 'stored cover');
+    $service = Service::factory()->create(['image_path' => 'services/cover.jpg']);
+
+    $this->actingAs($service->provider)->put(route('provider.services.update', $service), [
+        'title' => $service->title,
+        'category_id' => $service->category_id,
+        'description' => $service->description,
+        'price' => '40',
+        'duration_minutes' => 60,
+        'location' => 'Madrid',
+        'image' => UploadedFile::fake()->create('cover.svg', 12, 'image/svg+xml'),
+    ])->assertSessionHasErrors('image');
+
+    expect($service->refresh()->image_path)->toBe('services/cover.jpg')
+        ->and($disk->allFiles())->toBe(['services/cover.jpg']);
+});
+
+test('archiving removes the cover file and retains the service for its bookings', function () {
+    $disk = Storage::fake('public');
+    $disk->put('services/cover.png', 'stored cover');
+    $service = Service::factory()->published()->create(['image_path' => 'services/cover.png']);
+    $booking = Booking::factory()->for($service)->create();
+
+    $this->actingAs($service->provider)->delete(route('provider.services.destroy', $service))
+        ->assertRedirect(route('provider.dashboard'));
+
+    $disk->assertMissing('services/cover.png');
+    expect($booking->fresh()->service->image_path)->toBeNull()
+        ->and($booking->service->archived_at)->not->toBeNull();
+});
