@@ -45,6 +45,8 @@ test('registration rejects an email address already in use', function () {
 });
 
 test('existing users can log in and terminate their session', function () {
+    $this->withoutVite();
+
     $user = User::factory()->create();
 
     $this->post(route('login.store'), [

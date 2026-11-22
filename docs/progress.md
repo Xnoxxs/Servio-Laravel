@@ -44,7 +44,7 @@
 
 ## Phase 3 · Authentication and authorization
 
-**Status** — Implementation complete and verified on `feature/authentication`. Documentation commit and merge into `main` are pending.
+**Status** — Completed on `feature/authentication` and merged into `main` at `1dc1714`.
 
 - Added Blade registration and login forms, session-based sign-in and sign-out, and request validation using the existing Laravel web guard and user model.
 - Added login throttling and tests for guest access, registration, duplicate emails, administrator privilege injection, and session sign-in and sign-out.
@@ -60,6 +60,11 @@
 - `php artisan route:list --except-vendor -v --no-interaction` confirmed guest middleware for registration and login, auth middleware for logout and both auth and admin middleware for the admin landing route.
 - Pint passed at the authorization milestone. The authentication asset build passed with a warning about the optional font fallback optimizer. The phase diff passed whitespace checks.
 
-### Next phase
+## Phase 4 · Public marketplace and provider service management
 
-Start Phase 4 public marketplace work after Phase 3 merges into `main` and the user opens the next phase.
+**Status** — In progress on `feature/ui_interface`.
+
+- Added a shared marketplace layout, navigation and footer, a homepage with categories and featured listings, and a paginated catalogue with category filters and empty states. The homepage uses published seed data in local and testing environments.
+- Public browsing tests cover guests, unpublished listings, empty and unknown categories, and pagination with a category selected.
+- Next milestone adds keyword search, service details, duration and location. Provider dashboard, owner-only service CRUD and image management follow within Phase 4. Booking submission stays outside this phase.
+- The course Media Files section is unavailable in this checkout. Image upload and deletion choices will be documented in the provider milestone.

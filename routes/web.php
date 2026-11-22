@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\MarketplaceController;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'welcome')->name('home');
+Route::get('/', [MarketplaceController::class, 'home'])->name('home');
+Route::get('/services', [MarketplaceController::class, 'index'])->name('services.index');
 
 Route::middleware('guest')->group(function (): void {
     Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
