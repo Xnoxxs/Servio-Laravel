@@ -44,11 +44,22 @@
 
 ## Phase 3 · Authentication and authorization
 
-**Status** — In progress on `feature/authentication`.
+**Status** — Implementation complete and verified on `feature/authentication`. Documentation commit and merge into `main` are pending.
 
 - Added Blade registration and login forms, session-based sign-in and sign-out, and request validation using the existing Laravel web guard and user model.
 - Added login throttling and tests for guest access, registration, duplicate emails, administrator privilege injection, and session sign-in and sign-out.
-- Authentication commit: `c54f56c`.
+- Registration and session authentication commit: `c54f56c`.
 - Added the `auth` and `admin` middleware boundary to `admin.dashboard`. Administrator management is limited to category management, listing unpublication and review moderation as those workflows are added.
 - Added service and booking policies for public visibility, ownership, customer access and provider management. Private bookings and owner edits use the same ownership checks for administrators and members.
+- Administrator middleware and record ownership commit: `9b42a3d`.
 - Phase 4 applies service visibility to public routes. Phase 5 must authorize service mutations and derive the provider from the authenticated account. Phase 6 must authorize each booking route, scope dashboard queries by participant and derive the customer from the authenticated account. Booking state and time checks belong in the transition workflow.
+
+### Verification
+
+- `vendor/bin/pest --compact` passed all 27 tests with 195 assertions. The admin landing route was exercised over HTTP. Service and booking ownership were exercised through Laravel’s Gate.
+- `php artisan route:list --except-vendor -v --no-interaction` confirmed guest middleware for registration and login, auth middleware for logout and both auth and admin middleware for the admin landing route.
+- Pint passed at the authorization milestone. The authentication asset build passed with a warning about the optional font fallback optimizer. The phase diff passed whitespace checks.
+
+### Next phase
+
+Start Phase 4 public marketplace work after Phase 3 merges into `main` and the user opens the next phase.
