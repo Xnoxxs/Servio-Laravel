@@ -19,3 +19,7 @@ Route::middleware('guest')->group(function (): void {
 Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
     ->middleware('auth')
     ->name('logout');
+
+Route::view('admin', 'admin.index')
+    ->middleware(['auth', 'admin'])
+    ->name('admin.dashboard');

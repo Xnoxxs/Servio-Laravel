@@ -48,4 +48,7 @@
 
 - Added Blade registration and login forms, session-based sign-in and sign-out, and request validation using the existing Laravel web guard and user model.
 - Added login throttling and tests for guest access, registration, duplicate emails, administrator privilege injection, and session sign-in and sign-out.
-- Next milestone adds administrator middleware and record-level service and booking policies. The marketplace routes that use those policies are scheduled for later phases.
+- Authentication commit: `c54f56c`.
+- Added the `auth` and `admin` middleware boundary to `admin.dashboard`. Administrator management is limited to category management, listing unpublication and review moderation as those workflows are added.
+- Added service and booking policies for public visibility, ownership, customer access and provider management. Private bookings and owner edits use the same ownership checks for administrators and members.
+- Phase 4 applies service visibility to public routes. Phase 5 must authorize service mutations and derive the provider from the authenticated account. Phase 6 must authorize each booking route, scope dashboard queries by participant and derive the customer from the authenticated account. Booking state and time checks belong in the transition workflow.
