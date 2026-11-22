@@ -44,7 +44,7 @@
 
 ## Phase 3 · Authentication and authorization
 
-**Status** — Implementation complete and verified on `feature/authentication`. Documentation commit and merge into `main` are pending.
+**Status** — Completed on `feature/authentication` and merged into `main` at `1dc1714`.
 
 - Added Blade registration and login forms, session-based sign-in and sign-out, and request validation using the existing Laravel web guard and user model.
 - Added login throttling and tests for guest access, registration, duplicate emails, administrator privilege injection, and session sign-in and sign-out.
@@ -60,6 +60,28 @@
 - `php artisan route:list --except-vendor -v --no-interaction` confirmed guest middleware for registration and login, auth middleware for logout and both auth and admin middleware for the admin landing route.
 - Pint passed at the authorization milestone. The authentication asset build passed with a warning about the optional font fallback optimizer. The phase diff passed whitespace checks.
 
+## Phase 4 · Public marketplace and provider service management
+
+**Status** — Implementation complete and verified on `feature/ui_interface`. Documentation commit and merge into `main` are pending.
+
+- Added a shared marketplace layout, navigation and footer, a homepage with categories and featured listings, and a paginated catalogue with category filters and empty states. The homepage uses published seed data in local and testing environments.
+- Public browsing tests cover guests, unpublished listings, empty and unknown categories, and pagination with a category selected.
+- Homepage and catalogue commit: `7dfb035`.
+- Added keyword search across titles and descriptions, combined filtering, and public service detail pages with price, duration, location, provider, optional image and visible reviews. Older listings can have missing duration or location until edited.
+- Search and service details commit: `d929a80`.
+- Added the authenticated provider dashboard and owner-only creation, editing, publication, deactivation and deletion. New services start as drafts. Deactivation keeps a listing editable. Deletion archives it to preserve booking history.
+- Provider management commit `47116a3`.
+- Added optional cover upload, replacement and removal through the authorized service form. The archive action clears the cover reference and removes the stored file. Image replacement preserves the previous cover until the new reference is saved.
+- The course Media Files section is unavailable. This implementation uses Laravel’s existing public disk with generated filenames under `storage/app/public/services`. Run `php artisan storage:link` in each checkout so browsers can access covers. JPEG, PNG and WebP are supported up to 5 MB and 4096 × 4096 pixels.
+- Cover image management commit `f13fdf7`.
+- Expanded the demo catalogue to three published services in each of the six default categories. Repeat seeding preserves existing demo listings and booking history.
+
+### Verification
+
+- `vendor/bin/pest --compact` passed all 46 tests with 311 assertions, including public visibility, filtering, provider ownership and image cleanup.
+- Pint and the Vite build passed at the image milestone. Vite reported the optional font fallback optimization warning. The phase diff passed whitespace checks.
+- Headless Chrome loaded the home, search results, service details, signed-in provider dashboard and new service form at desktop (1440 px) and mobile (390 px) widths. Styles loaded and none of the checked pages had horizontal overflow.
+
 ### Next phase
 
-Start Phase 4 public marketplace work after Phase 3 merges into `main` and the user opens the next phase.
+Phase 4 includes provider service management, the work originally listed under Phase 5. Booking requests and approvals are the next implementation scope. Start only after this branch merges into `main` and the user opens that phase.

@@ -21,6 +21,8 @@ class ServiceFactory extends Factory
             'title' => fake()->sentence(3),
             'description' => fake()->paragraph(),
             'price_cents' => fake()->numberBetween(1500, 15000),
+            'duration_minutes' => 60,
+            'location' => fake()->city(),
             'is_published' => false,
         ];
     }
