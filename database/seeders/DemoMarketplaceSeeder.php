@@ -9,10 +9,12 @@ use App\Models\Service;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class DemoMarketplaceSeeder extends Seeder
 {
-    private const LISTINGS = [
+    public const LISTINGS = [
         'car-washing' => [
             ['Exterior car wash', 'Hand wash the bodywork, wheels and exterior glass.', 2200, 35, 'Madrid'],
             ['Interior car detailing', 'Vacuum seats and mats and clean interior surfaces.', 4800, 90, 'Alcobendas'],
@@ -64,7 +66,14 @@ class DemoMarketplaceSeeder extends Seeder
                 foreach ($listings as [$title, $description, $priceCents, $durationMinutes, $location]) {
                     $service = $provider->services()->whereBelongsTo($category)->firstOrNew(['title' => $title]);
 
+                    $cover = self::imagePath($slug, $title, 1);
+
                     if ($service->exists) {
+                        if ($service->archived_at === null && $service->image_path === null && Storage::disk('public')->exists($cover)) {
+                            $service->image_path = $cover;
+                            $service->save();
+                        }
+
                         continue;
                     }
 
@@ -76,6 +85,7 @@ class DemoMarketplaceSeeder extends Seeder
                     ]);
                     $service->category()->associate($category);
                     $service->is_published = true;
+                    $service->image_path = Storage::disk('public')->exists($cover) ? $cover : null;
                     $service->save();
 
                     if ($title === 'Garden cleanup') {
@@ -87,6 +97,11 @@ class DemoMarketplaceSeeder extends Seeder
                 }
             }
         });
+    }
+
+    public static function imagePath(string $category, string $title, int $position): string
+    {
+        return 'demo-services/'.$category.'/'.Str::slug($title).'/'.$position.'.webp';
     }
 
     private function seedBookingHistory(Service $service, User $customer): void

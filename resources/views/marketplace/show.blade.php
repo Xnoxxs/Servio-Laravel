@@ -8,6 +8,15 @@
                 @if ($service->image_path)
                     <img src="{{ Storage::disk('public')->url($service->image_path) }}" alt="{{ $service->title }}" class="aspect-video w-full rounded-2xl object-cover">
                 @endif
+                @if ($gallery !== [])
+                    <div class="grid gap-3 sm:grid-cols-2" aria-label="Additional service photos">
+                        @foreach ($gallery as $photo)
+                            <a href="{{ $photo }}" aria-label="View service photo {{ $loop->iteration + 1 }}">
+                                <img src="{{ $photo }}" alt="" loading="lazy" class="aspect-video w-full rounded-xl object-cover">
+                            </a>
+                        @endforeach
+                    </div>
+                @endif
                 <section class="rounded-2xl border border-stone-200 bg-white p-6">
                     <h2 class="text-xl font-semibold">About this service</h2>
                     <p class="mt-3 whitespace-pre-line break-words leading-relaxed text-stone-700">{{ $service->description }}</p>

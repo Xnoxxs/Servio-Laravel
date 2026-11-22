@@ -6,7 +6,9 @@ use App\Models\Review;
 use App\Models\Service;
 use App\Models\User;
 use Database\Seeders\CategorySeeder;
+use Database\Seeders\DemoMarketplaceSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Storage;
 
 uses(RefreshDatabase::class);
 
@@ -68,4 +70,28 @@ test('seeding expands a legacy demo catalogue and preserves its original listing
     $this->assertDatabaseCount('services', 18);
     expect($listing->fresh()->price_cents)->toBe(3900)
         ->and($provider->services()->count())->toBe(18);
+});
+
+test('re-seeding attaches generated covers and shows their galleries', function () {
+    $disk = Storage::fake('public');
+    $this->withoutVite();
+    $this->seed();
+
+    $service = Service::where('title', 'Garden cleanup')->sole();
+    $cover = DemoMarketplaceSeeder::imagePath('gardening', $service->title, 1);
+    $secondPhoto = DemoMarketplaceSeeder::imagePath('gardening', $service->title, 2);
+    $disk->put($cover, 'cover fixture');
+    $disk->put($secondPhoto, 'gallery fixture');
+
+    $this->seed();
+
+    expect($service->refresh()->image_path)->toBe($cover);
+    $this->get(route('services.show', $service))->assertOk()->assertSee($cover)->assertSee($secondPhoto);
+
+    $service->image_path = 'services/provider-cover.jpg';
+    $service->save();
+    $this->seed();
+
+    expect($service->refresh()->image_path)->toBe('services/provider-cover.jpg');
+    $this->get(route('services.show', $service))->assertOk()->assertDontSee($secondPhoto);
 });
