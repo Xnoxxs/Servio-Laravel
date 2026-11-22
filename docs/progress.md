@@ -68,5 +68,7 @@
 - Public browsing tests cover guests, unpublished listings, empty and unknown categories, and pagination with a category selected.
 - Homepage and catalogue commit: `7dfb035`.
 - Added keyword search across titles and descriptions, combined filtering, and public service detail pages with price, duration, location, provider, optional image and visible reviews. Older listings can have missing duration or location until edited.
-- Next milestone adds the provider dashboard and owner-only service CRUD. Image upload and replacement follow within Phase 4. Booking submission stays outside this phase.
+- Search and service details commit: `d929a80`.
+- Added the authenticated provider dashboard and owner-only creation, editing, publication, deactivation and deletion. New services start as drafts. Deactivation keeps a listing editable. Deletion archives it to preserve booking history.
+- Next milestone adds validated service image upload, replacement and cleanup. Booking submission stays outside this phase.
 - The course Media Files section is unavailable in this checkout. Image upload and deletion choices will be documented in the provider milestone.

@@ -19,7 +19,7 @@ class ServicePolicy
 
     public function update(User $user, Service $service): bool
     {
-        return $user->id === $service->provider_id;
+        return $user->id === $service->provider_id && $service->archived_at === null;
     }
 
     public function delete(User $user, Service $service): bool

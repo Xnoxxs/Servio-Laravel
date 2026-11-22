@@ -25,6 +25,7 @@ class Service extends Model
             'price_cents' => 'integer',
             'duration_minutes' => 'integer',
             'is_published' => 'boolean',
+            'archived_at' => 'datetime',
         ];
     }
 

@@ -17,9 +17,7 @@
             <div class="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-semibold">
                 <a href="{{ route('services.index') }}" class="hover:text-emerald-800 hover:underline">Browse services</a>
                 @auth
-                    @if (Route::has('provider.dashboard'))
-                        <a href="{{ route('provider.dashboard') }}" class="hover:text-emerald-800 hover:underline">Provider dashboard</a>
-                    @endif
+                    <a href="{{ route('provider.dashboard') }}" class="hover:text-emerald-800 hover:underline">Provider dashboard</a>
                     @if (auth()->user()->is_admin)
                         <a href="{{ route('admin.dashboard') }}" class="hover:text-emerald-800 hover:underline">Administration</a>
                     @endif
