@@ -25,7 +25,7 @@
 
 ## Phase 2 · Database
 
-**Status** — Implementation complete and verified on `feature/database`. Documentation commit and merge into `main` are pending.
+**Status** — Completed on `feature/database` and merged into `main` at `0baba3c`.
 
 | Milestone | Commit | Delivered |
 | --- | --- | --- |
@@ -42,6 +42,10 @@
 | `php artisan migrate --seed --no-interaction` and `php artisan db:seed --no-interaction` | Passed on a fresh temporary SQLite database. All eight migrations ran, and repeat seeding completed successfully. |
 | Schema rollback and reapply | Passed on temporary SQLite during the schema milestone. The three starter migrations remained in place. |
 
-### Next phase
+## Phase 3 · Authentication and authorization
 
-Phase 3 adds authentication and authorization on `feature/03-auth`. Start after the Phase 2 branch is merged into `main` and the user opens Phase 3.
+**Status** — In progress on `feature/authentication`.
+
+- Added Blade registration and login forms, session-based sign-in and sign-out, and request validation using the existing Laravel web guard and user model.
+- Added login throttling and tests for guest access, registration, duplicate emails, administrator privilege injection, and session sign-in and sign-out.
+- Next milestone adds administrator middleware and record-level service and booking policies. The marketplace routes that use those policies are scheduled for later phases.
