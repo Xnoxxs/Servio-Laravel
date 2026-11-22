@@ -20,10 +20,19 @@
                 <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($services as $service)
                         <li class="flex flex-col gap-4 rounded-2xl border border-stone-200 bg-white p-5">
-                            <div>
-                                <p class="text-sm text-stone-600">{{ $service->category->name }} · {{ $service->is_published ? 'Published' : 'Unpublished' }}</p>
-                                <h2 class="mt-1 break-words text-xl font-semibold">{{ $service->title }}</h2>
-                                <p class="mt-2 font-semibold text-[#174937]">€{{ number_format($service->price_cents / 100, 2) }}</p>
+                            <div class="flex items-start gap-4">
+                                <div class="size-16 shrink-0 overflow-hidden rounded-xl bg-[#e3ebdb] sm:size-18">
+                                    @if ($service->image_path)
+                                        <img src="{{ Storage::disk('public')->url($service->image_path) }}" alt="" loading="lazy" class="size-full object-cover">
+                                    @else
+                                        <span class="grid size-full place-items-center px-1 text-center text-xs text-stone-600">No cover</span>
+                                    @endif
+                                </div>
+                                <div class="min-w-0">
+                                    <p class="text-sm text-stone-600">{{ $service->category->name }} · {{ $service->is_published ? 'Published' : 'Unpublished' }}</p>
+                                    <h2 class="mt-1 break-words text-xl font-semibold">{{ $service->title }}</h2>
+                                    <p class="mt-2 font-semibold text-[#174937]">€{{ number_format($service->price_cents / 100, 2) }}</p>
+                                </div>
                             </div>
                             <div class="mt-auto flex flex-wrap items-center gap-x-4 gap-y-3 border-t border-stone-200 pt-4 text-sm font-semibold">
                                 <a href="{{ route('provider.services.edit', $service) }}" class="text-[#174937] underline">Edit</a>
@@ -36,14 +45,6 @@
                                     <input type="hidden" name="is_published" value="{{ $service->is_published ? '0' : '1' }}">
                                     <button type="submit" class="cursor-pointer text-[#174937] underline">{{ $service->is_published ? 'Deactivate' : 'Publish' }}</button>
                                 </form>
-                                <details>
-                                    <summary class="cursor-pointer text-red-700 underline">Delete</summary>
-                                    <form method="POST" action="{{ route('provider.services.destroy', $service) }}" class="mt-2">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="cursor-pointer rounded-lg bg-red-700 px-3 py-2 text-white">Confirm deletion</button>
-                                    </form>
-                                </details>
                             </div>
                         </li>
                     @endforeach

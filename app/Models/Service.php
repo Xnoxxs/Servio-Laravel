@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Support\Facades\Storage;
 
 #[Fillable(['title', 'description', 'price_cents', 'duration_minutes', 'location'])]
 class Service extends Model
@@ -27,6 +28,29 @@ class Service extends Model
             'is_published' => 'boolean',
             'archived_at' => 'datetime',
         ];
+    }
+
+    /** @return list<string> */
+    public function photoUrls(): array
+    {
+        if (! $this->image_path) {
+            return [];
+        }
+
+        $disk = Storage::disk('public');
+        $photos = [$disk->url($this->image_path)];
+
+        if (str_starts_with($this->image_path, 'demo-services/')) {
+            foreach ([2, 3] as $position) {
+                $path = dirname($this->image_path).'/'.$position.'.webp';
+
+                if ($disk->exists($path)) {
+                    $photos[] = $disk->url($path);
+                }
+            }
+        }
+
+        return $photos;
     }
 
     public function category(): BelongsTo

@@ -17,17 +17,22 @@ test('local seeding creates a linked demo and can be repeated', function () {
     $this->seed();
 
     $this->assertDatabaseCount('categories', 6);
-    $this->assertDatabaseCount('users', 2);
     $this->assertDatabaseCount('services', 18);
-    $this->assertDatabaseCount('bookings', 2);
-    $this->assertDatabaseCount('reviews', 1);
+    $this->assertDatabaseCount('bookings', 126);
+    $this->assertDatabaseCount('reviews', 125);
+
+    $reviewCounts = Service::withCount('reviews')->get()->pluck('reviews_count');
+    $reviewed = $reviewCounts->filter();
+    expect($reviewed->count())->toBe(14)
+        ->and($reviewed->min())->toBe(3)
+        ->and($reviewed->max())->toBe(20);
 
     $serviceCounts = Category::withCount(['services' => fn ($query) => $query->where('is_published', true)])
         ->get()->pluck('services_count')->all();
     expect($serviceCounts)->toBe(array_fill(0, 6, 3));
 
     $service = Service::where('title', 'Garden cleanup')->sole();
-    $review = Review::sole();
+    $review = $service->reviews()->oldest('reviews.id')->firstOrFail();
 
     expect($service->is_published)->toBeTrue()
         ->and($service->category->slug)->toBe('gardening')

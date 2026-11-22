@@ -6,7 +6,6 @@ use App\Models\Category;
 use App\Models\Service;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class MarketplaceController extends Controller
@@ -53,18 +52,7 @@ class MarketplaceController extends Controller
     {
         $listing = $this->publishedServices()->findOrFail($service);
 
-        $gallery = [];
-        if ($listing->image_path && str_starts_with($listing->image_path, 'demo-services/')) {
-            foreach ([2, 3] as $position) {
-                $path = dirname($listing->image_path).'/'.$position.'.webp';
-                if (Storage::disk('public')->exists($path)) {
-                    $gallery[] = Storage::disk('public')->url($path);
-                }
-            }
-        }
-
         return view('marketplace.show', [
-            'gallery' => $gallery,
             'service' => $listing,
             'reviews' => $listing->reviews()
                 ->where('reviews.is_hidden', false)
