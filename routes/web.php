@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [MarketplaceController::class, 'home'])->name('home');
 Route::get('/services', [MarketplaceController::class, 'index'])->name('services.index');
+Route::get('/services/{service}', [MarketplaceController::class, 'show'])->whereNumber('service')->name('services.show');
 
 Route::middleware('guest')->group(function (): void {
     Route::get('register', [RegisteredUserController::class, 'create'])->name('register');

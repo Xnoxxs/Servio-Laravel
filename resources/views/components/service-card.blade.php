@@ -9,11 +9,7 @@
     </div>
     <div class="flex flex-1 flex-col gap-3 p-5">
         <h3 class="text-xl font-semibold tracking-tight">
-            @if (Route::has('services.show'))
-                <a href="{{ route('services.show', $service) }}" class="hover:underline">{{ $service->title }}</a>
-            @else
-                {{ $service->title }}
-            @endif
+            <a href="{{ route('services.show', $service) }}" class="hover:underline">{{ $service->title }}</a>
         </h3>
         <p class="line-clamp-2 text-sm leading-relaxed text-stone-600">{{ $service->description }}</p>
         <div class="mt-auto flex flex-wrap items-baseline justify-between gap-2 border-t border-stone-100 pt-3 text-sm">

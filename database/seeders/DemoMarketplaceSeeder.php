@@ -37,6 +37,8 @@ class DemoMarketplaceSeeder extends Seeder
                     'title' => 'Garden cleanup',
                     'description' => 'Clear leaves, trim hedges and tidy garden paths.',
                     'price_cents' => 3500,
+                    'duration_minutes' => 60,
+                    'location' => 'Madrid',
                 ]);
 
             Booking::factory()->for($service)->for($customer, 'customer')->create();

@@ -21,6 +21,11 @@ class MarketplaceController extends Controller
     public function index(Request $request): View
     {
         $categorySlug = $request->query('category');
+        $keyword = $request->query('q', '');
+        abort_unless(is_string($keyword) && mb_strlen($keyword) <= 100, 422, 'Search must be 100 characters or fewer.');
+
+        $keyword = trim($keyword);
+        $pattern = '%'.strtr($keyword, ['!' => '!!', '%' => '!%', '_' => '!_']).'%';
         abort_unless($categorySlug === null || is_string($categorySlug), 404);
 
         $category = $categorySlug === null
@@ -30,10 +35,30 @@ class MarketplaceController extends Controller
         return view('marketplace.index', [
             'services' => $this->publishedServices()
                 ->when($category, fn (Builder $query): Builder => $query->whereBelongsTo($category))
+                ->when($keyword !== '', fn (Builder $query): Builder => $query->where(
+                    fn (Builder $query): Builder => $query
+                        ->whereRaw("title LIKE ? ESCAPE '!'", [$pattern])
+                        ->orWhereRaw("description LIKE ? ESCAPE '!'", [$pattern]),
+                ))
                 ->paginate(9)
-                ->appends($category ? ['category' => $category->slug] : []),
+                ->appends(array_filter(['category' => $category?->slug, 'q' => $keyword], fn (?string $value): bool => $value !== null && $value !== '')),
             'categories' => Category::orderBy('name')->get(),
             'category' => $category,
+            'keyword' => $keyword,
+        ]);
+    }
+
+    public function show(string $service): View
+    {
+        $listing = $this->publishedServices()->findOrFail($service);
+
+        return view('marketplace.show', [
+            'service' => $listing,
+            'reviews' => $listing->reviews()
+                ->where('reviews.is_hidden', false)
+                ->with('booking.customer')
+                ->latest('reviews.id')
+                ->paginate(5),
         ]);
     }
 

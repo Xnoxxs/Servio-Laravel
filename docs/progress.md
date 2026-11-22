@@ -66,5 +66,7 @@
 
 - Added a shared marketplace layout, navigation and footer, a homepage with categories and featured listings, and a paginated catalogue with category filters and empty states. The homepage uses published seed data in local and testing environments.
 - Public browsing tests cover guests, unpublished listings, empty and unknown categories, and pagination with a category selected.
-- Next milestone adds keyword search, service details, duration and location. Provider dashboard, owner-only service CRUD and image management follow within Phase 4. Booking submission stays outside this phase.
+- Homepage and catalogue commit: `7dfb035`.
+- Added keyword search across titles and descriptions, combined filtering, and public service detail pages with price, duration, location, provider, optional image and visible reviews. Older listings can have missing duration or location until edited.
+- Next milestone adds the provider dashboard and owner-only service CRUD. Image upload and replacement follow within Phase 4. Booking submission stays outside this phase.
 - The course Media Files section is unavailable in this checkout. Image upload and deletion choices will be documented in the provider milestone.
