@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\BookingStatusNotification;
 use Database\Factories\BookingFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -62,6 +63,7 @@ class Booking extends Model
 
             $booking->status = $status;
             $booking->save();
+            BookingStatusNotification::dispatchAfterCommit($booking, $status);
         }, attempts: 3);
     }
 
