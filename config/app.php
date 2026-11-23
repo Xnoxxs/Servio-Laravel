@@ -67,6 +67,8 @@ return [
 
     'timezone' => 'UTC',
 
+    'demo_provider_email' => env('DEMO_PROVIDER_EMAIL', 'provider@servio.example'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Locale Configuration

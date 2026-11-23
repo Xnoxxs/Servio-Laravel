@@ -6,6 +6,7 @@ use App\Http\Requests\StoreBookingRequest;
 use App\Models\Booking;
 use App\Models\BookingStatus;
 use App\Models\Service;
+use App\Notifications\BookingStatusNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -50,6 +51,7 @@ class CustomerBookingController extends Controller
             $booking->currency = 'EUR';
             $booking->status = BookingStatus::Pending;
             $booking->save();
+            BookingStatusNotification::dispatchAfterCommit($booking, BookingStatus::Pending);
 
             return $booking;
         }, attempts: 3);

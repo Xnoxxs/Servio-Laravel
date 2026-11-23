@@ -46,7 +46,7 @@ class DemoServiceReviewSeeder extends Seeder
             return;
         }
 
-        $provider = User::where('email', 'provider@servio.example')->firstOrFail();
+        $provider = User::where('email', config('app.demo_provider_email'))->firstOrFail();
 
         DB::transaction(function () use ($provider): void {
             $reviewers = [];

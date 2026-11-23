@@ -56,3 +56,30 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Booking email in development
+
+Keep `QUEUE_CONNECTION=database` and `MAIL_MAILER=log` in your local `.env`. Set `APP_URL` to the Servio address you open in your browser so the queued emails link to the right app. Apply the migrations and start a worker from the project folder:
+
+```sh
+php artisan migrate
+php artisan queue:work database --timeout=60
+```
+
+In a second terminal, run `tail -f storage/logs/laravel.log` with the default local logging configuration. Request or update a booking in the browser. The worker writes the outgoing message to the log, so you can check its recipient, subject and booking link locally. Check failed jobs with `php artisan queue:failed`; after fixing the cause, retry a specific job with `php artisan queue:retry <job-id>`.
+
+The demo provider login and its booking email address can be set with `DEMO_PROVIDER_EMAIL` in the local environment before seeding.
+
+## SendGrid delivery
+
+For an environment that should send real email, set these values in its private environment configuration:
+
+```dotenv
+MAIL_MAILER=sendgrid
+SENDGRID_API_KEY=
+MAIL_FROM_ADDRESS=
+MAIL_FROM_NAME=Servio
+QUEUE_CONNECTION=database
+```
+
+Use a SendGrid API key with Mail Send permission and a From address verified through Single Sender Verification or domain authentication. The `sendgrid` mailer uses SMTP with required TLS on port 587. Refresh cached configuration if your environment uses it, then restart the queue worker so it reloads the settings. [SendGrid SMTP setup](https://www.twilio.com/docs/sendgrid/for-developers/sending-email/integrating-with-the-smtp-api) · [Sender verification](https://www.twilio.com/docs/sendgrid/ui/sending-email/sender-verification)

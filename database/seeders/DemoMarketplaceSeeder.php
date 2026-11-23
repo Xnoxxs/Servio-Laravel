@@ -53,7 +53,7 @@ class DemoMarketplaceSeeder extends Seeder
             return;
         }
 
-        $providerEmail = 'provider@servio.example';
+        $providerEmail = config('app.demo_provider_email');
         $customerEmail = 'customer@servio.example';
 
         DB::transaction(function () use ($providerEmail, $customerEmail): void {
