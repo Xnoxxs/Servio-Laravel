@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Booking;
+use App\Models\BookingStatus;
 use App\Models\Service;
 use App\Models\User;
 
@@ -21,6 +22,13 @@ class BookingPolicy
     public function cancel(User $user, Booking $booking): bool
     {
         return $this->view($user, $booking);
+    }
+
+    public function review(User $user, Booking $booking): bool
+    {
+        return $this->view($user, $booking)
+            && $booking->status === BookingStatus::Completed
+            && $booking->service->provider_id !== $user->id;
     }
 
     public function manage(User $user, Booking $booking): bool

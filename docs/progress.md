@@ -88,7 +88,7 @@ Phase 4 includes provider service management, the work originally listed under P
 
 ## Phase 5 · Booking system
 
-**Status** — Implementation complete and verified on `feature/booking_system`. Documentation commit and merge into `main` are pending. This phase covers booking scope previously listed as Phase 6.
+**Status** — Completed on `feature/booking_system` and merged into `main` at `dfe8466`. This phase covers booking scope previously listed as Phase 6.
 
 - Customers can request another provider’s published service and view their own bookings. Requests start pending and store the service price, currency and duration.
 - Appointments use Europe/Madrid for entry and display and UTC for persistence. Invalid, ambiguous and past times are rejected.
@@ -106,4 +106,17 @@ Phase 4 includes provider service management, the work originally listed under P
 
 ### Next phase
 
-After this branch merges into `main`, the next implementation scope is customer review submission after completed bookings and administrator management. Booking email notifications follow in a separate phase.
+After this branch merges into `main`, the next implementation scope is customer review submission after completed bookings. Administrator management is deferred. Booking email notifications follow in a separate phase.
+
+## Phase 6 · Customer reviews
+
+**Status** — Implementation complete and verified on `feature/reviews`. Commit and merge into `main` are pending.
+
+- Customers can submit a 1–5 star rating and an optional comment from their own completed booking. The endpoint enforces login, booking ownership, completed status and the prohibition on reviewing one’s own service.
+- The existing unique booking constraint prevents duplicate reviews, including repeat submissions. New reviews appear on the public service detail page when the listing is published.
+- Administrator management is deferred at the user’s request.
+- `vendor/bin/pest --compact` passed 70 tests with 472 assertions. The review tests cover submission, public display, absent comments, duplicate submissions, role and status restrictions, and validation. Pint, Vite and whitespace checks passed. Vite reported the existing optional font optimizer warning.
+
+### Next phase
+
+Booking email notifications follow after the reviews branch merges into `main` and the user opens that phase.

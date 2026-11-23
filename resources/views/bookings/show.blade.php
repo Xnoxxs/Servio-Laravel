@@ -51,5 +51,38 @@
                 <x-booking-action :action="route('bookings.cancel', $booking)">Cancel booking</x-booking-action>
             @endif
         </div>
+        @unless ($providerView)
+            @can('review', $booking)
+                <section class="mt-6 rounded-2xl border border-stone-200 bg-white p-5 sm:p-8" aria-labelledby="booking-review-heading">
+                    @if ($booking->review)
+                        <h2 id="booking-review-heading" class="text-xl font-semibold">Your review</h2>
+                        <p class="mt-2 text-sm font-semibold text-emerald-900">{{ $booking->review->rating }} out of 5 stars</p>
+                        @if ($booking->review->comment)
+                            <p class="mt-2 whitespace-pre-line break-words text-stone-700">{{ $booking->review->comment }}</p>
+                        @endif
+                    @else
+                        <h2 id="booking-review-heading" class="text-xl font-semibold">Leave a review</h2>
+                        <form method="POST" action="{{ route('bookings.reviews.store', $booking) }}" class="mt-4 space-y-4">
+                            @csrf
+                            <div>
+                                <label for="rating" class="block text-sm font-semibold">Rating</label>
+                                <select id="rating" name="rating" required class="mt-2 w-full rounded-xl border border-stone-300 bg-white px-4 py-2.5 sm:max-w-xs"
+                                    @error('rating') aria-invalid="true" aria-describedby="rating-error" @enderror>
+                                    <option value="">Choose a rating</option>
+                                    @for ($rating = 5; $rating >= 1; $rating--)
+                                        <option value="{{ $rating }}" @selected(is_scalar(old('rating')) && (string) old('rating') === (string) $rating)>{{ $rating }} {{ $rating === 1 ? 'star' : 'stars' }}</option>
+                                    @endfor
+                                </select>
+                                @error('rating')
+                                    <p id="rating-error" class="mt-1 text-sm text-red-700">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            <x-service-field name="comment" label="Comment (optional)" :multiline="true" rows="4" maxlength="2000" />
+                            <x-button>Post review</x-button>
+                        </form>
+                    @endif
+                </section>
+            @endcan
+        @endunless
     </div>
 </x-app-layout>

@@ -61,7 +61,7 @@ class CustomerBookingController extends Controller
     {
         Gate::authorize('view', $booking);
 
-        return view('bookings.show', ['booking' => $booking->load('service.provider'), 'providerView' => false]);
+        return view('bookings.show', ['booking' => $booking->load(['service.provider', 'review']), 'providerView' => false]);
     }
 
     public function cancel(Booking $booking): RedirectResponse
