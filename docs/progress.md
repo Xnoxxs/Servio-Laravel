@@ -123,9 +123,15 @@ Booking email notifications follow after the reviews branch merges into `main` a
 
 ## Phase 7 · Booking notifications
 
-**Status** — In progress on `feature/notifications`.
+**Status** — Implementation complete and verified locally on `feature/notifications`. Configuration commit and merge into `main` are pending.
 
 - Added queued mail notifications after commit. New requests and cancellations notify the provider. Acceptance, rejection and completion notify the customer.
 - Booking writes remain committed if queue dispatch fails. The notification retries delivery up to three attempts through Laravel’s queue.
 - All 79 Pest tests passed with 501 assertions, including recipient routing, queue dispatch, transaction rollback and simulated dispatch failure. Pint and whitespace checks passed.
-- Next milestone configures SendGrid and documents local log mail and queue worker operation.
+- Queued booking emails commit `109996c`.
+- Added the SendGrid SMTP mailer with required TLS and an empty `SENDGRID_API_KEY` example variable. Local development keeps the log mailer. The README documents worker startup, mail inspection and SendGrid sender setup.
+- Verified that a real database worker rendered the acceptance email to the log with the expected customer and booking link. The temporary database had no remaining or failed jobs. A live database-worker test also confirmed that SendGrid accepted a booking request email from a verified sender. Inbox delivery was not independently verified.
+
+### Next phase
+
+Final quality assurance, UI polish, CI and documentation follow after this branch merges into `main` and the user opens the next phase.

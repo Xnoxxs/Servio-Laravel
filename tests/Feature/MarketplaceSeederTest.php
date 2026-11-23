@@ -62,7 +62,8 @@ test('a standalone review factory creates a completed booking with a price snaps
 
 test('seeding expands a legacy demo catalogue and preserves its original listing', function () {
     $this->seed(CategorySeeder::class);
-    $provider = User::factory()->create(['email' => 'provider@servio.example']);
+    config(['app.demo_provider_email' => 'local-provider@example.com']);
+    $provider = User::factory()->create(['email' => 'local-provider@example.com']);
     $category = Category::where('slug', 'gardening')->sole();
     $listing = Service::factory()->published()->for($provider, 'provider')->for($category)->create([
         'title' => 'Garden cleanup',
