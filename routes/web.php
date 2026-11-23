@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\CustomerBookingController;
 use App\Http\Controllers\MarketplaceController;
+use App\Http\Controllers\Provider\BookingController as ProviderBookingController;
 use App\Http\Controllers\Provider\ServiceController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,5 +33,26 @@ Route::view('admin', 'admin.index')
 Route::middleware('auth')->prefix('provider')->name('provider.')->group(function (): void {
     Route::get('/', [ServiceController::class, 'index'])->name('dashboard');
     Route::patch('services/{service}/publication', [ServiceController::class, 'updatePublication'])->name('services.publication');
+    Route::get('bookings', [ProviderBookingController::class, 'index'])->name('bookings.index');
+    Route::get('bookings/{booking}', [ProviderBookingController::class, 'show'])
+        ->whereNumber('booking')->name('bookings.show');
+    Route::patch('bookings/{booking}/accept', [ProviderBookingController::class, 'accept'])
+        ->whereNumber('booking')->name('bookings.accept');
+    Route::patch('bookings/{booking}/reject', [ProviderBookingController::class, 'reject'])
+        ->whereNumber('booking')->name('bookings.reject');
+    Route::patch('bookings/{booking}/complete', [ProviderBookingController::class, 'complete'])
+        ->whereNumber('booking')->name('bookings.complete');
     Route::resource('services', ServiceController::class)->except(['index', 'show']);
+});
+
+Route::middleware('auth')->group(function (): void {
+    Route::get('services/{service}/bookings/create', [CustomerBookingController::class, 'create'])
+        ->whereNumber('service')->name('bookings.create');
+    Route::post('services/{service}/bookings', [CustomerBookingController::class, 'store'])
+        ->whereNumber('service')->name('bookings.store');
+    Route::get('bookings', [CustomerBookingController::class, 'index'])->name('bookings.index');
+    Route::get('bookings/{booking}', [CustomerBookingController::class, 'show'])
+        ->whereNumber('booking')->name('bookings.show');
+    Route::patch('bookings/{booking}/cancel', [CustomerBookingController::class, 'cancel'])
+        ->whereNumber('booking')->name('bookings.cancel');
 });

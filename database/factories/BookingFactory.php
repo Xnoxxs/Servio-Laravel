@@ -22,6 +22,7 @@ class BookingFactory extends Factory
             'scheduled_at' => now()->addDay(),
             'status' => BookingStatus::Pending,
             'price_cents' => fn (array $attributes): int => Service::findOrFail($attributes['service_id'])->price_cents,
+            'duration_minutes' => fn (array $attributes): int => Service::findOrFail($attributes['service_id'])->duration_minutes ?? 60,
             'currency' => 'EUR',
         ];
     }

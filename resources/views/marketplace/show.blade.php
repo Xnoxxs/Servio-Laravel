@@ -58,6 +58,15 @@
                         <dd class="font-semibold">{{ $service->location ?? 'Location unavailable' }}</dd>
                     </div>
                 </dl>
+                @if ($service->duration_minutes > 0)
+                    @auth
+                        @can('create', [\App\Models\Booking::class, $service])
+                            <x-button :href="route('bookings.create', $service)" class="mt-6 w-full">Request a booking</x-button>
+                        @endcan
+                    @else
+                        <x-button :href="route('bookings.create', $service)" class="mt-6 w-full">Log in to request a booking</x-button>
+                    @endauth
+                @endif
             </aside>
         </div>
     </article>
