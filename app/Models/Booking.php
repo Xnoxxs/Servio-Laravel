@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 #[Fillable(['scheduled_at'])]
 class Booking extends Model
 {
+    public const APPOINTMENT_TIMEZONE = 'Europe/Madrid';
+
     /** @use HasFactory<BookingFactory> */
     use HasFactory;
 
@@ -24,6 +26,7 @@ class Booking extends Model
             'scheduled_at' => 'datetime',
             'status' => BookingStatus::class,
             'price_cents' => 'integer',
+            'duration_minutes' => 'integer',
         ];
     }
 

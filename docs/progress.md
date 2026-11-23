@@ -62,7 +62,7 @@
 
 ## Phase 4 · Public marketplace and provider service management
 
-**Status** — Implementation complete and verified on `feature/ui_interface`. Documentation commit and merge into `main` are pending.
+**Status** — Completed on `feature/ui_interface` and merged into `main` at `7e0c287`.
 
 - Added a shared marketplace layout, navigation and footer, a homepage with categories and featured listings, and a paginated catalogue with category filters and empty states. The homepage uses published seed data in local and testing environments.
 - Public browsing tests cover guests, unpublished listings, empty and unknown categories, and pagination with a category selected.
@@ -85,3 +85,12 @@
 ### Next phase
 
 Phase 4 includes provider service management, the work originally listed under Phase 5. Booking requests and approvals are the next implementation scope. Start only after this branch merges into `main` and the user opens that phase.
+
+## Phase 5 · Booking system
+
+**Status** — In progress on `feature/booking_system`. This phase covers booking scope previously listed as Phase 6.
+
+- Customers can request another provider’s published service and view their own bookings. Requests start pending and store the service price, currency and duration.
+- Appointments use Europe/Madrid for entry and display and UTC for persistence. Invalid, ambiguous and past times are rejected.
+- Existing bookings use the current listing duration where available, with a 60-minute fallback. New requests require a valid duration. SQLite uses immediate transactions to serialize booking writes.
+- Next milestone adds provider booking views, approval and rejection, cancellation, completion and same-service overlap checks.

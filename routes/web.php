@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\CustomerBookingController;
 use App\Http\Controllers\MarketplaceController;
 use App\Http\Controllers\Provider\ServiceController;
 use Illuminate\Support\Facades\Route;
@@ -32,4 +33,14 @@ Route::middleware('auth')->prefix('provider')->name('provider.')->group(function
     Route::get('/', [ServiceController::class, 'index'])->name('dashboard');
     Route::patch('services/{service}/publication', [ServiceController::class, 'updatePublication'])->name('services.publication');
     Route::resource('services', ServiceController::class)->except(['index', 'show']);
+});
+
+Route::middleware('auth')->group(function (): void {
+    Route::get('services/{service}/bookings/create', [CustomerBookingController::class, 'create'])
+        ->whereNumber('service')->name('bookings.create');
+    Route::post('services/{service}/bookings', [CustomerBookingController::class, 'store'])
+        ->whereNumber('service')->name('bookings.store');
+    Route::get('bookings', [CustomerBookingController::class, 'index'])->name('bookings.index');
+    Route::get('bookings/{booking}', [CustomerBookingController::class, 'show'])
+        ->whereNumber('booking')->name('bookings.show');
 });
