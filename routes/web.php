@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\BookingReviewController;
 use App\Http\Controllers\CustomerBookingController;
 use App\Http\Controllers\MarketplaceController;
 use App\Http\Controllers\Provider\BookingController as ProviderBookingController;
@@ -55,4 +56,6 @@ Route::middleware('auth')->group(function (): void {
         ->whereNumber('booking')->name('bookings.show');
     Route::patch('bookings/{booking}/cancel', [CustomerBookingController::class, 'cancel'])
         ->whereNumber('booking')->name('bookings.cancel');
+    Route::post('bookings/{booking}/reviews', [BookingReviewController::class, 'store'])
+        ->whereNumber('booking')->name('bookings.reviews.store');
 });
