@@ -18,6 +18,7 @@ class CustomerBookingController extends Controller
     public function index(Request $request): View
     {
         return view('bookings.index', [
+            'providerView' => false,
             'bookings' => $request->user()->customerBookings()->with('service')->latest('id')->paginate(12),
         ]);
     }
@@ -60,6 +61,14 @@ class CustomerBookingController extends Controller
     {
         Gate::authorize('view', $booking);
 
-        return view('bookings.show', ['booking' => $booking->load('service.provider')]);
+        return view('bookings.show', ['booking' => $booking->load('service.provider'), 'providerView' => false]);
+    }
+
+    public function cancel(Booking $booking): RedirectResponse
+    {
+        Gate::authorize('cancel', $booking);
+        $booking->transitionTo(BookingStatus::Cancelled);
+
+        return to_route('bookings.show', $booking)->with('status', 'Booking cancelled.');
     }
 }

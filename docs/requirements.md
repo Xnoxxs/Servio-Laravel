@@ -26,4 +26,4 @@ Servio is a university project for finding and booking local services such as ca
 
 ## Scope boundaries
 
-Online payments, real-time chat, AI recommendations, external maps and complex scheduling are outside the MVP. The booking workflow has no availability calendar or automatic prevention of overlapping appointments. Optional enhancements for a later decision include multiple images, password reset screens, email verification, review editing and booking reminders. Course requirements may change the priority of these items once the references are available.
+Online payments, real-time chat, AI recommendations, external maps and complex scheduling are outside the MVP. The booking workflow uses one appointment start and a saved duration. Accepting a request checks for overlaps against accepted or completed bookings for the same service. An appointment can start when the preceding one ends. Optional enhancements for a later decision include multiple images, password reset screens, email verification, review editing and booking reminders. Course requirements may change the priority of these items once the references are available.

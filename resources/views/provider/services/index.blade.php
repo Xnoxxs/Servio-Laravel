@@ -2,7 +2,10 @@
     <div class="mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-14">
         <div class="flex flex-wrap items-center justify-between gap-4">
             <h1 class="text-3xl font-semibold tracking-tight sm:text-5xl">Your services</h1>
-            <x-button :href="route('provider.services.create')">New service</x-button>
+            <div class="flex flex-wrap items-center gap-4">
+                <a href="{{ route('provider.bookings.index') }}" class="text-sm font-semibold text-emerald-900 underline underline-offset-4">Booking requests</a>
+                <x-button :href="route('provider.services.create')">New service</x-button>
+            </div>
         </div>
 
         @if (session('status'))
