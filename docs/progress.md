@@ -88,7 +88,7 @@ Phase 4 includes provider service management, the work originally listed under P
 
 ## Phase 5 · Booking system
 
-**Status** — In progress on `feature/booking_system`. This phase covers booking scope previously listed as Phase 6.
+**Status** — Implementation complete and verified on `feature/booking_system`. Documentation commit and merge into `main` are pending. This phase covers booking scope previously listed as Phase 6.
 
 - Customers can request another provider’s published service and view their own bookings. Requests start pending and store the service price, currency and duration.
 - Appointments use Europe/Madrid for entry and display and UTC for persistence. Invalid, ambiguous and past times are rejected.
@@ -96,4 +96,14 @@ Phase 4 includes provider service management, the work originally listed under P
 - Customer booking requests and dashboard commit `ad2832d`.
 - Added the provider request dashboard, role-specific detail views, accept and reject actions, customer cancellation and provider completion. All actions enforce participant ownership and validate the current state and appointment time.
 - Booking decisions serialize by service and check saved durations against accepted and completed appointments. Overlaps for the same service are rejected, adjacent appointments are allowed, and cancelling an accepted booking releases its slot.
-- Phase closeout follows after the provider booking milestone is committed.
+- Provider decisions, cancellation and overlap checks commit `6a05e8b`.
+
+### Verification
+
+- `vendor/bin/pest --compact` passed 61 tests with 423 assertions. Tests cover booking creation, price and duration snapshots, private dashboards, ownership, state and time checks, overlapping requests and release of a cancelled slot.
+- `php artisan route:list --path=bookings -v --no-interaction` confirmed `auth` middleware on all 10 booking routes.
+- Pint and the Vite build passed in the provider milestone. Vite reported the existing optional font optimizer warning. The duration migration applied to the local and temporary preview databases. The phase diff passed whitespace checks.
+
+### Next phase
+
+After this branch merges into `main`, the next implementation scope is customer review submission after completed bookings and administrator management. Booking email notifications follow in a separate phase.
