@@ -138,10 +138,11 @@ Final quality assurance, UI polish, CI and documentation follow after this branc
 
 ## Phase 8 · Final integration and delivery
 
-**Status** — Workflow audit and README update complete on `main`. GitHub Actions is the next milestone and will be committed separately.
+**Status** — Workflow audit, README update and CI configuration complete on `main`. The audit is recorded in `551f4cb`. The first hosted CI run is pending the workflow commit and push.
 
 - Reviewed requirements, architecture and implementation plan against the visitor, customer, provider and administrator workflows. The administrator landing page is protected. Category management and moderation remain deferred.
 - Audited validation, listing and booking ownership, uploads, database constraints and booking transitions. Restored the archive action on the owner’s edit page and fixed registration error rendering when a text field receives an array.
 - Removed the starter tautology and duplicate homepage smoke test. Kept tests covering public behavior, authorization, persistence and file cleanup. Extended lifecycle coverage from booking through public review. The course test-review material was unavailable, so the repository testing skill supplied the review criteria.
 - Pest passed 78 tests with 510 assertions. Pint, Vite and whitespace checks passed. Fresh SQLite setup seeded 18 services and 125 reviews.
 - Headless Chrome checked the homepage, search, listing details, customer bookings, request form, provider dashboard, edit form, provider booking requests and administrator landing page at 1440 px and 390 px. Each loaded with styles and without horizontal overflow.
+- Added a GitHub Actions workflow for pushes and pull requests. It installs locked dependencies on PHP 8.5 and Node.js 24, builds frontend assets, checks PHP formatting and runs the full SQLite-backed Pest suite without external mail credentials. Workflow YAML and the local build, formatting and test commands passed.
