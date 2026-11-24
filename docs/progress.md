@@ -123,7 +123,7 @@ Booking email notifications follow after the reviews branch merges into `main` a
 
 ## Phase 7 · Booking notifications
 
-**Status** — Implementation complete and verified locally on `feature/notifications`. Configuration commit and merge into `main` are pending.
+**Status** — Completed on `feature/notifications` and merged into `main` at `348c31d`.
 
 - Added queued mail notifications after commit. New requests and cancellations notify the provider. Acceptance, rejection and completion notify the customer.
 - Booking writes remain committed if queue dispatch fails. The notification retries delivery up to three attempts through Laravel’s queue.
@@ -135,3 +135,13 @@ Booking email notifications follow after the reviews branch merges into `main` a
 ### Next phase
 
 Final quality assurance, UI polish, CI and documentation follow after this branch merges into `main` and the user opens the next phase.
+
+## Phase 8 · Final integration and delivery
+
+**Status** — Workflow audit and README update complete on `main`. GitHub Actions is the next milestone and will be committed separately.
+
+- Reviewed requirements, architecture and implementation plan against the visitor, customer, provider and administrator workflows. The administrator landing page is protected. Category management and moderation remain deferred.
+- Audited validation, listing and booking ownership, uploads, database constraints and booking transitions. Restored the archive action on the owner’s edit page and fixed registration error rendering when a text field receives an array.
+- Removed the starter tautology and duplicate homepage smoke test. Kept tests covering public behavior, authorization, persistence and file cleanup. Extended lifecycle coverage from booking through public review. The course test-review material was unavailable, so the repository testing skill supplied the review criteria.
+- Pest passed 78 tests with 510 assertions. Pint, Vite and whitespace checks passed. Fresh SQLite setup seeded 18 services and 125 reviews.
+- Headless Chrome checked the homepage, search, listing details, customer bookings, request form, provider dashboard, edit form, provider booking requests and administrator landing page at 1440 px and 390 px. Each loaded with styles and without horizontal overflow.

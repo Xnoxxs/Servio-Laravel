@@ -38,6 +38,10 @@ test('customer and provider see a request progress from pending to accepted to c
     $this->patch(route('provider.bookings.complete', $booking))->assertRedirect(route('provider.bookings.show', $booking));
     $this->actingAs($customer)->get(route('bookings.show', $booking))->assertOk()->assertSee('Completed');
     expect($booking->refresh()->status)->toBe(BookingStatus::Completed);
+
+    $this->post(route('bookings.reviews.store', $booking), ['rating' => 5, 'comment' => 'A helpful visit.'])
+        ->assertRedirect(route('bookings.show', $booking));
+    $this->get(route('services.show', $service))->assertOk()->assertSee('A helpful visit.');
 });
 
 test('providers can reject pending requests and rejected bookings stay terminal', function () {

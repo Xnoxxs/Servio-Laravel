@@ -2,6 +2,8 @@
 
 Start each phase after the previous branch is merged into `main` and the user opens the next phase on its dedicated branch. At each milestone, run the relevant checks and present the exact files and proposed commit. Continue after the user confirms the commit.
 
+The table records the original sequencing. The project combined the public marketplace and provider tools in Phase 4, then delivered bookings in Phase 5, reviews in Phase 6 and notifications in Phase 7. Administrator management was deferred. Phase 8 final QA runs on `main`, with GitHub Actions in a separate commit.
+
 | Phase and branch | Milestones | Dependencies and acceptance |
 | --- | --- | --- |
 | 1 · `feature/architecture` | Inspect repository and draft requirements, architecture, plan and progress. Reconcile the documents with all 12 course sections when supplied. | Course material and user approval. Schema, authorization, workflows and scope are reviewed before application implementation starts. The supplied branch name applies to this phase. |

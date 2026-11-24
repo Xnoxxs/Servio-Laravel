@@ -104,6 +104,9 @@ test('deleting a listing removes it from both views and preserves the booking hi
     $booking = Booking::factory()->create();
     $service = $booking->service;
 
+    $this->actingAs($service->provider)->get(route('provider.services.edit', $service))
+        ->assertOk()->assertSee('Confirm archive')->assertSee(route('provider.services.destroy', $service));
+
     $this->actingAs($service->provider)->delete(route('provider.services.destroy', $service))
         ->assertRedirect(route('provider.dashboard'));
 

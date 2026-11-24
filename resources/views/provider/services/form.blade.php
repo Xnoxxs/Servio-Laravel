@@ -60,5 +60,17 @@
                 <x-button>{{ $service->exists ? 'Save changes' : 'Create draft' }}</x-button>
             </form>
         @endif
+
+        @if ($service->exists)
+            <details class="mt-6 rounded-2xl border border-stone-200 bg-white p-5 sm:p-8">
+                <summary class="cursor-pointer font-semibold text-red-800">Archive service</summary>
+                <p class="mt-3 text-sm text-stone-700">This removes the listing from the marketplace and your dashboard. Existing bookings stay available.</p>
+                <form method="POST" action="{{ route('provider.services.destroy', $service) }}" class="mt-4">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="cursor-pointer rounded-full bg-red-800 px-5 py-2.5 text-sm font-semibold text-white hover:bg-red-900">Confirm archive</button>
+                </form>
+            </details>
+        @endif
     </div>
 </x-app-layout>

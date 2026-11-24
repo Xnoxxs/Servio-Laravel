@@ -12,7 +12,7 @@ Servio is a university project for finding and booking local services such as ca
 | Bookings | A signed-in customer selects a future date and time for another user's published service. The request starts pending and stores the price shown for the service at creation. Customers and providers see their respective booking dashboards. |
 | Booking decisions | Providers accept or reject pending requests for their own services and can complete accepted bookings. Customers can cancel eligible bookings. The server enforces ownership and permitted state transitions. |
 | Reviews | Customers can submit one review per completed booking they made. Visible reviews appear on the associated service. |
-| Administration | Administrators have a protected dashboard and can manage categories, unpublish listings and hide inappropriate reviews under the proposed moderation scope. |
+| Administration | Administrators can access a protected landing page. Category management, listing moderation and review moderation are deferred. |
 | Email | Booking lifecycle changes send queued email to the affected customer or provider. |
 | Interface and quality | Use reusable Blade layouts and components, Tailwind CSS, responsive layouts, accessible forms and automated Pest tests. GitHub Actions verifies the application before merge. |
 
@@ -21,7 +21,7 @@ Servio is a university project for finding and booking local services such as ca
 - A customer can cancel a pending or accepted booking before its scheduled start. A provider can accept a pending booking before its start, reject a pending booking at any time and complete an accepted booking at or after its start. Rejected, cancelled and completed bookings are terminal. Past pending requests stay visible and can be rejected. No automatic expiry is proposed.
 - Use EUR prices in integer cents. Display a single price per service and preserve both amount and currency on each booking. Show times in Europe/Madrid, convert to UTC for persistence and reject invalid or ambiguous local times with a clear validation message.
 - Services have one category and an optional cover image. Removing a listing unpublishes it and preserves its booking and review history. A category in use cannot be deleted until its listings are reassigned. Existing bookings can progress after unpublishing.
-- A review contains a rating from 1 to 5 and an optional written comment. Admin moderation hides reviews from public pages. Administrative actions do not grant authority to act as a customer or provider on another user's booking.
+- A review contains a rating from 1 to 5 and an optional written comment. Public pages show visible reviews. Administrative actions do not grant authority to act as a customer or provider on another user's booking.
 - Send new request and cancellation emails to the provider, and acceptance, rejection and completion emails to the customer.
 
 ## Scope boundaries

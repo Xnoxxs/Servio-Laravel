@@ -43,9 +43,9 @@ Index marketplace queries by publication and category, provider listings by prov
 | Provider | GET `/provider/bookings`, GET `/provider/bookings/{booking}` | `provider.bookings.index/show` → provider controller scopes records to owned services. |
 | Booking participant | PATCH `/bookings/{booking}/cancel`; PATCH `/provider/bookings/{booking}/{accept, reject, complete}` | `bookings.cancel` and `provider.bookings.accept/reject/complete` → transition actions call shared booking logic. Each action has a literal route and explicit authorization. |
 | Customer | POST `/bookings/{booking}/reviews` | `bookings.reviews.store` → review controller validates and creates a review for an eligible booking. |
-| Admin | GET `/admin`; resource actions under `/admin/categories`; GET `/admin/services` and `/admin/reviews`; PATCH `/admin/services/{service}/unpublish` and `/admin/reviews/{review}/visibility` | `admin.*` → dedicated dashboard, category management and moderation controllers. |
+| Admin | GET `/admin` | `admin.dashboard` → protected administrator landing page. Category management and moderation routes are deferred. |
 
-Use named web routes, model binding, Form Requests for nontrivial inputs and model policies for resource actions. Admin routes require authentication and an admin gate. Service mutation requires ownership or a specifically authorized admin moderation action. Booking reads are scoped by dashboard and record access is checked on direct URLs. Booking mutations require the appropriate participant and state. Review creation requires the booking customer and completed status. Public queries and detail routes exclude unpublished services and hidden reviews.
+Use named web routes, model binding, Form Requests for nontrivial inputs and model policies for resource actions. The admin route requires authentication and the admin middleware. Service mutation routes require ownership. Booking reads are scoped by dashboard and record access is checked on direct URLs. Booking mutations require the appropriate participant and state. Review creation requires the booking customer and completed status. Public queries and detail routes exclude unpublished services and hidden reviews.
 
 ## Workflow integrity and infrastructure
 

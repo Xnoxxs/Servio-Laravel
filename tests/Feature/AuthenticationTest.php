@@ -84,3 +84,16 @@ test('repeated failed attempts temporarily block login from the same client', fu
 
     $this->assertGuest();
 });
+
+test('invalid account form input renders validation messages after redirect', function () {
+    $this->withoutVite();
+
+    $this->followingRedirects()->from(route('register'))->post(route('register.store'), [
+        'name' => ['invalid'],
+        'email' => ['invalid'],
+    ])->assertOk()
+        ->assertSee('The name field must be a string.')
+        ->assertSee('The email field must be a string.');
+
+    $this->assertGuest();
+});
