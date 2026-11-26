@@ -5,7 +5,7 @@
 
         @if ($categories->isEmpty())
             <div class="mt-6">
-                <x-marketplace-empty title="No categories available" message="A category must be available before you can save a service." />
+                <x-service-empty title="No categories available" message="A category must be available before you can save a service." />
             </div>
         @else
             <form method="POST" enctype="multipart/form-data" action="{{ $service->exists ? route('provider.services.update', $service) : route('provider.services.store') }}" class="mt-6 space-y-5 rounded-2xl border border-stone-200 bg-white p-5 sm:p-8">

@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Database\Factories\ServiceFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -28,6 +30,19 @@ class Service extends Model
             'is_published' => 'boolean',
             'archived_at' => 'datetime',
         ];
+    }
+
+    /**
+     * @param  Builder<Service>  $query
+     * @return Builder<Service>
+     */
+    #[Scope]
+    protected function forPublicBrowsing(Builder $query): Builder
+    {
+        return $query
+            ->where('is_published', true)
+            ->with(['category', 'provider'])
+            ->latest('id');
     }
 
     /** @return list<string> */

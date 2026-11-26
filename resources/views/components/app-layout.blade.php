@@ -28,7 +28,7 @@
                     </form>
                 @else
                     <a href="{{ route('login') }}" class="hover:text-emerald-800 hover:underline">Log in</a>
-                    <x-button :href="route('register')">Sign up</x-button>
+                    <x-button :href="route('signIn')">Sign up</x-button>
                 @endauth
             </div>
         </nav>
@@ -67,7 +67,7 @@
                             <li><a href="{{ route('provider.services.create') }}" class="underline-offset-4 hover:underline">List a service</a></li>
                         @else
                             <li><a href="{{ route('login') }}" class="underline-offset-4 hover:underline">Log in</a></li>
-                            <li><a href="{{ route('register') }}" class="underline-offset-4 hover:underline">Create an account</a></li>
+                            <li><a href="{{ route('signIn') }}" class="underline-offset-4 hover:underline">Create an account</a></li>
                         @endauth
                     </ul>
                 </nav>

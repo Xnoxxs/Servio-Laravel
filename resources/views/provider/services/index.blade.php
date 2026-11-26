@@ -14,11 +14,11 @@
 
         <div class="mt-8">
             @if ($services->isEmpty())
-                <x-marketplace-empty title="No services on this page" message="Create a service and publish it when it’s ready.">
+                <x-service-empty title="No services on this page" message="Create a service and publish it when it’s ready.">
                     @if ($services->currentPage() > 1)
                         <x-button :href="route('provider.dashboard')">Back to your services</x-button>
                     @endif
-                </x-marketplace-empty>
+                </x-service-empty>
             @else
                 <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($services as $service)

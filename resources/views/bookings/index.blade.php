@@ -3,11 +3,11 @@
         <h1 class="text-3xl font-semibold tracking-tight sm:text-5xl">{{ $providerView ? 'Booking requests' : 'My bookings' }}</h1>
         <div class="mt-8">
             @if ($bookings->isEmpty())
-                <x-marketplace-empty title="No bookings on this page" :message="$providerView ? 'Requests for your services will appear here.' : 'Browse the marketplace to request a service.'">
+                <x-service-empty title="No bookings on this page" :message="$providerView ? 'Requests for your services will appear here.' : 'Browse the marketplace to request a service.'">
                     @if (! $providerView)
                         <x-button :href="route('services.index')">Browse services</x-button>
                     @endif
-                </x-marketplace-empty>
+                </x-service-empty>
             @else
                 <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($bookings as $booking)

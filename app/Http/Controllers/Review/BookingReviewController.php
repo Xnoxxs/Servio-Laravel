@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Review;
 
+use App\Http\Controllers\Shared\Controller;
 use App\Http\Requests\StoreBookingReviewRequest;
 use App\Models\Booking;
 use Illuminate\Database\UniqueConstraintViolationException;

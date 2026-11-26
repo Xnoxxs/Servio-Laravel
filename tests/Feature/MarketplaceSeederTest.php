@@ -19,13 +19,26 @@ test('local seeding creates a linked demo and can be repeated', function () {
     $this->assertDatabaseCount('categories', 6);
     $this->assertDatabaseCount('services', 18);
     $this->assertDatabaseCount('bookings', 126);
-    $this->assertDatabaseCount('reviews', 125);
+    $this->assertDatabaseCount('reviews', 122);
+
+    $customer = User::where('email', 'customer@servio.example')->sole();
+    $unreviewedServices = $customer->customerBookings()
+        ->where('status', BookingStatus::Completed)
+        ->doesntHave('review')
+        ->with('service')
+        ->get()
+        ->pluck('service.title')
+        ->sort()
+        ->values()
+        ->all();
+
+    expect($unreviewedServices)->toBe(['Apartment cleaning', 'Patio planter refresh', 'Small apartment move']);
 
     $reviewCounts = Service::withCount('reviews')->get()->pluck('reviews_count');
     $reviewed = $reviewCounts->filter();
     expect($reviewed->count())->toBe(14)
         ->and($reviewed->min())->toBe(3)
-        ->and($reviewed->max())->toBe(20);
+        ->and($reviewed->max())->toBe(19);
 
     $serviceCounts = Category::withCount(['services' => fn ($query) => $query->where('is_published', true)])
         ->get()->pluck('services_count')->all();

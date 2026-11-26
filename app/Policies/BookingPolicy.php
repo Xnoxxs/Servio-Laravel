@@ -11,7 +11,7 @@ class BookingPolicy
 {
     public function create(User $user, Service $service): bool
     {
-        return $service->is_published && $service->archived_at === null && $user->id !== $service->provider_id;
+        return $service->is_published && $service->archived_at === null;
     }
 
     public function view(User $user, Booking $booking): bool

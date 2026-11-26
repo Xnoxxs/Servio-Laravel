@@ -11,11 +11,11 @@ test('visitors can open the public home and account forms', function () {
 
     $this->get(route('home'))->assertOk()->assertSee(route('login'));
     $this->get(route('login'))->assertOk()->assertSee(route('login.store'));
-    $this->get(route('register'))->assertOk()->assertSee(route('register.store'));
+    $this->get(route('signIn'))->assertOk()->assertSee(route('signIn.store'));
 });
 
 test('registration signs in a member without accepting admin privileges', function () {
-    $this->post(route('register.store'), [
+    $this->post(route('signIn.store'), [
         'name' => 'Servio Member',
         'email' => 'member@example.com',
         'password' => 'example-password',
@@ -33,12 +33,12 @@ test('registration signs in a member without accepting admin privileges', functi
 test('registration rejects an email address already in use', function () {
     $existingUser = User::factory()->create();
 
-    $this->from(route('register'))->post(route('register.store'), [
+    $this->from(route('signIn'))->post(route('signIn.store'), [
         'name' => 'Another Member',
         'email' => $existingUser->email,
         'password' => 'example-password',
         'password_confirmation' => 'example-password',
-    ])->assertRedirect(route('register'))->assertSessionHasErrors('email');
+    ])->assertRedirect(route('signIn'))->assertSessionHasErrors('email');
 
     $this->assertGuest();
     $this->assertDatabaseCount('users', 1);
@@ -56,7 +56,7 @@ test('existing users can log in and terminate their session', function () {
 
     $this->assertAuthenticatedAs($user);
 
-    $this->get(route('register'))->assertRedirect(route('home'));
+    $this->get(route('signIn'))->assertRedirect(route('home'));
     $this->get(route('home'))->assertOk()->assertSee(route('logout'));
     $this->post(route('logout'))->assertRedirect(route('home'));
     $this->assertGuest();
@@ -88,7 +88,7 @@ test('repeated failed attempts temporarily block login from the same client', fu
 test('invalid account form input renders validation messages after redirect', function () {
     $this->withoutVite();
 
-    $this->followingRedirects()->from(route('register'))->post(route('register.store'), [
+    $this->followingRedirects()->from(route('signIn'))->post(route('signIn.store'), [
         'name' => ['invalid'],
         'email' => ['invalid'],
     ])->assertOk()

@@ -23,11 +23,11 @@
 
         <section class="mt-8" aria-label="Service results">
             @if ($services->isEmpty())
-                <x-marketplace-empty title="No services found" message="Try a different keyword or browse all categories.">
+                <x-service-empty title="No services found" message="Try a different keyword or browse all categories.">
                     @if ($category || $keyword !== '' || $services->currentPage() > 1)
                         <x-button :href="route('services.index')">View all services</x-button>
                     @endif
-                </x-marketplace-empty>
+                </x-service-empty>
             @else
                 <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($services as $service)

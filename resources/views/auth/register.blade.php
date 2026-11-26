@@ -1,5 +1,5 @@
 <x-auth-layout title="Create an account">
-    <form method="POST" action="{{ route('register.store') }}" class="space-y-4">
+    <form method="POST" action="{{ route('signIn.store') }}" class="space-y-4">
         @csrf
         <x-auth-field name="name" label="Name" autocomplete="name" />
         <x-auth-field name="email" label="Email address" type="email" autocomplete="email" />

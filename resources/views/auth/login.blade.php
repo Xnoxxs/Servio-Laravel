@@ -8,6 +8,6 @@
         </button>
     </form>
     <p class="mt-5 text-sm text-stone-600">
-        New to Servio? <a href="{{ route('register') }}" class="font-semibold text-teal-800 underline">Create an account</a>
+        New to Servio? <a href="{{ route('signIn') }}" class="font-semibold text-teal-800 underline">Create an account</a>
     </p>
 </x-auth-layout>

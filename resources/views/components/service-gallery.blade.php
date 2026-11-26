@@ -21,9 +21,13 @@
         @if ($multiple)
             <div data-gallery-controls hidden>
                 <button type="button" data-gallery-step="-1" aria-label="Previous photo of {{ $label }}"
-                    class="absolute left-3 top-1/2 z-20 grid size-10 -translate-y-1/2 cursor-pointer place-items-center rounded-full bg-white text-3xl leading-none font-semibold text-[#174937] shadow-sm hover:bg-emerald-50">‹</button>
+                    class="absolute left-3 top-1/2 z-20 grid size-10 -translate-y-1/2 cursor-pointer place-items-center rounded-full bg-white text-3xl leading-none font-semibold text-[#174937] shadow-sm hover:bg-emerald-50">
+                    <span aria-hidden="true" class="-translate-y-[3px]">‹</span>
+                </button>
                 <button type="button" data-gallery-step="1" aria-label="Next photo of {{ $label }}"
-                    class="absolute right-3 top-1/2 z-20 grid size-10 -translate-y-1/2 cursor-pointer place-items-center rounded-full bg-white text-3xl leading-none font-semibold text-[#174937] shadow-sm hover:bg-emerald-50">›</button>
+                    class="absolute right-3 top-1/2 z-20 grid size-10 -translate-y-1/2 cursor-pointer place-items-center rounded-full bg-white text-3xl leading-none font-semibold text-[#174937] shadow-sm hover:bg-emerald-50">
+                    <span aria-hidden="true" class="-translate-y-[3px]">›</span>
+                </button>
                 <span data-gallery-counter role="status" class="pointer-events-none absolute bottom-4 right-4 z-20 rounded-full bg-stone-950/75 px-3 py-1 text-xs font-semibold text-white">1 / {{ count($photos) }}</span>
             </div>
         @endif

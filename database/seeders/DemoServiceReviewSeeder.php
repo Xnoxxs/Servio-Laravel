@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Booking;
+use App\Models\BookingStatus;
 use App\Models\Review;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -10,6 +11,12 @@ use Illuminate\Support\Facades\DB;
 
 class DemoServiceReviewSeeder extends Seeder
 {
+    private const AWAITING_CUSTOMER_REVIEW = [
+        'Apartment cleaning',
+        'Small apartment move',
+        'Patio planter refresh',
+    ];
+
     private const REVIEW_COUNTS = [
         'Exterior car wash' => 12,
         'Interior car detailing' => 5,
@@ -62,6 +69,15 @@ class DemoServiceReviewSeeder extends Seeder
 
                 for ($position = 0; $position < $count; $position++) {
                     $reviewer = $reviewers[$position] ??= $this->reviewer($position);
+
+                    if ($position === 0 && in_array($service->title, self::AWAITING_CUSTOMER_REVIEW, true)) {
+                        if (! $service->bookings()->whereBelongsTo($reviewer, 'customer')->where('status', BookingStatus::Completed)->exists()) {
+                            Booking::factory()->completed()->for($service)->for($reviewer, 'customer')
+                                ->create(['scheduled_at' => now()->subDays(2)]);
+                        }
+
+                        continue;
+                    }
 
                     if ($reviewedCustomers->has($reviewer->id)) {
                         continue;

@@ -33,13 +33,14 @@ Index marketplace queries by publication and category, provider listings by prov
 
 | Access | Method and path | Named route and responsibility |
 | --- | --- | --- |
-| Public | GET `/`, `/services` | `home`, `services.index` → `MarketplaceController@index` renders published listings with validated search and category filters. |
-| Public | GET `/services/{service}` | `services.show` → `MarketplaceController@show` renders a published service and visible reviews. |
-| Guest | GET/POST `/register`, GET/POST `/login` | `register`, `register.store`, `login`, `login.store` → registration and session controllers render forms and process submissions. |
+| Public | GET `/`, `/services` | `home`, `services.index` → `ServiceController@home` and `ServiceController@index` render published listings with validated search and category filters. |
+| Public | GET `/services/{service}` | `services.show` → `ServiceController@show` renders a published service and visible reviews. |
+| Guest | GET/POST `/signIn`, GET/POST `/login` | `signIn`, `signIn.store`, `login`, `login.store` → registration and session controllers render forms and process submissions. |
 | Signed in | POST `/logout` | `logout` → session controller ends the session. |
 | Provider | GET `/provider` | `provider.dashboard` → provider dashboard controller summarizes owned services and incoming bookings. |
 | Provider | GET/POST `/provider/services`, GET `/provider/services/create`, GET `/provider/services/{service}/edit`, PATCH/DELETE `/provider/services/{service}` | `provider.services.*` → resource controller handles owned listing CRUD and images. DELETE unpublishes. |
-| Customer | GET `/bookings`, GET `/bookings/{booking}`, POST `/services/{service}/bookings` | `bookings.index/show/store` → customer controller scopes reads to the customer and records requests. |
+| Customer | GET `/bookings`, GET `/bookings/{booking}` | `bookings.index/show` → customer booking controller scopes reads to the customer. |
+| Customer | GET `/services/{service}/bookings/create`, POST `/services/{service}/bookings` | `bookings.create/store` → service controller displays the request form and records the booking. |
 | Provider | GET `/provider/bookings`, GET `/provider/bookings/{booking}` | `provider.bookings.index/show` → provider controller scopes records to owned services. |
 | Booking participant | PATCH `/bookings/{booking}/cancel`; PATCH `/provider/bookings/{booking}/{accept, reject, complete}` | `bookings.cancel` and `provider.bookings.accept/reject/complete` → transition actions call shared booking logic. Each action has a literal route and explicit authorization. |
 | Customer | POST `/bookings/{booking}/reviews` | `bookings.reviews.store` → review controller validates and creates a review for an eligible booking. |

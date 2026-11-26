@@ -31,7 +31,7 @@
                 <a href="{{ route('services.index') }}" class="text-sm font-semibold text-[#174937] underline underline-offset-4">View all services</a>
             </div>
             @if ($featuredServices->isEmpty())
-                <x-marketplace-empty title="No services yet" message="Published listings will appear here when providers add them." />
+                <x-service-empty title="No services yet" message="Published listings will appear here when providers add them." />
             @else
                 <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($featuredServices as $service)

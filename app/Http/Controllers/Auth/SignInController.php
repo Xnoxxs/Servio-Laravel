@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Shared\Controller;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
@@ -12,14 +12,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
-class RegisteredUserController extends Controller
+class SignInController extends Controller
 {
-    public function create(): View
+    public function showSignIn(): View
     {
         return view('auth.register');
     }
 
-    public function store(RegisterRequest $request): RedirectResponse
+    public function signIn(RegisterRequest $request): RedirectResponse
     {
         try {
             $user = User::create($request->validated());

@@ -42,14 +42,14 @@ test('listing visibility and mutation respect ownership and explicit moderation 
     expect(Gate::allows('view', $service))->toBeTrue();
 });
 
-test('one member can offer listings and request other published services', function () {
+test('members can offer listings and request published services including their own', function () {
     $service = Service::factory()->published()->create();
     $member = User::factory()->create();
     $draft = Service::factory()->create();
 
     expect($member->can('create', Service::class))->toBeTrue()
         ->and($member->can('create', [Booking::class, $service]))->toBeTrue()
-        ->and($service->provider->can('create', [Booking::class, $service]))->toBeFalse()
+        ->and($service->provider->can('create', [Booking::class, $service]))->toBeTrue()
         ->and($member->can('create', [Booking::class, $draft]))->toBeFalse()
         ->and(Gate::allows('create', [Booking::class, $service]))->toBeFalse();
 });

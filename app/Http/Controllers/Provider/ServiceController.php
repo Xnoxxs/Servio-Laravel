@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Provider;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Shared\Controller;
 use App\Http\Requests\SaveServiceRequest;
 use App\Models\Category;
 use App\Models\Service;
@@ -19,19 +19,23 @@ class ServiceController extends Controller
 {
     public function index(Request $request): View
     {
-        return view('provider.services.index', [
-            'services' => $request->user()->services()->whereNull('archived_at')->with('category')->latest('id')->paginate(12),
-        ]);
+        $services = $request->user()->services()
+            ->whereNull('archived_at')
+            ->with('category')
+            ->latest('id')
+            ->paginate(12);
+
+        return view('provider.services.index', compact('services'));
     }
 
     public function create(): View
     {
         Gate::authorize('create', Service::class);
 
-        return view('provider.services.form', [
-            'service' => new Service,
-            'categories' => Category::orderBy('name')->get(),
-        ]);
+        $service = new Service;
+        $categories = Category::orderBy('name')->get();
+
+        return view('provider.services.form', compact('service', 'categories'));
     }
 
     public function store(SaveServiceRequest $request): RedirectResponse
@@ -46,10 +50,9 @@ class ServiceController extends Controller
     {
         Gate::authorize('update', $service);
 
-        return view('provider.services.form', [
-            'service' => $service,
-            'categories' => Category::orderBy('name')->get(),
-        ]);
+        $categories = Category::orderBy('name')->get();
+
+        return view('provider.services.form', compact('service', 'categories'));
     }
 
     public function update(SaveServiceRequest $request, Service $service): RedirectResponse

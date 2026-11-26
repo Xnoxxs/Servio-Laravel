@@ -57,17 +57,31 @@ test('guests must sign in and customers can only see their own bookings', functi
     $this->actingAs($booking->service->provider)->get(route('bookings.show', $booking))->assertForbidden();
 });
 
-test('booking requests reject ineligible services', function () {
+test('a provider can book their own published service', function () {
     $customer = User::factory()->create();
     $ownService = Service::factory()->published()->for($customer, 'provider')->create();
-    $draft = Service::factory()->create();
 
     $this->actingAs($customer);
+    $this->get(route('services.show', $ownService))->assertOk()->assertSee('Request a booking');
+    $this->get(route('bookings.create', $ownService))->assertOk();
+    $response = $this->post(route('bookings.store', $ownService), ['scheduled_at' => '2026-11-24T13:15']);
 
-    foreach ([$ownService, $draft] as $service) {
-        $this->get(route('bookings.create', $service))->assertForbidden();
-        $this->post(route('bookings.store', $service), ['scheduled_at' => '2026-11-24T13:15'])->assertForbidden();
-    }
+    $booking = Booking::sole();
+    $response->assertRedirect(route('bookings.show', $booking));
+    $this->assertDatabaseHas('bookings', [
+        'id' => $booking->id,
+        'service_id' => $ownService->id,
+        'customer_id' => $customer->id,
+        'status' => BookingStatus::Pending->value,
+    ]);
+});
+
+test('booking requests reject unpublished services', function () {
+    $draft = Service::factory()->create();
+
+    $this->actingAs(User::factory()->create());
+    $this->get(route('bookings.create', $draft))->assertForbidden();
+    $this->post(route('bookings.store', $draft), ['scheduled_at' => '2026-11-24T13:15'])->assertForbidden();
 
     $this->assertDatabaseCount('bookings', 0);
 });
