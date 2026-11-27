@@ -65,7 +65,7 @@ Route::middleware('auth')->group(function (): void {
     Route::patch('bookings/{booking}/cancel', [CustomerBookingController::class, 'cancel'])
         ->whereNumber('booking')->name('bookings.cancel');
 
-    Route::post('bookings/{booking}/reviews', [BookingReviewController::class, 'store'])
+    Route::post('bookings/{booking}/reviews', [BookingReviewController::class, 'create'])
         ->whereNumber('booking')->name('bookings.reviews.store');
 }
 );

@@ -15,7 +15,9 @@ beforeEach(function () {
 test('a customer can review their completed booking and the review appears on the service', function () {
     $booking = Booking::factory()->completed()->create();
 
-    $this->actingAs($booking->customer)->get(route('bookings.show', $booking))
+    $this->actingAs($booking->customer)->get(route('bookings.index'))
+        ->assertOk()->assertSee(route('bookings.show', $booking).'#booking-review-heading');
+    $this->get(route('bookings.show', $booking))
         ->assertOk()->assertSee('Leave a review');
     $this->post(route('bookings.reviews.store', $booking), [
         'rating' => 4,
@@ -32,6 +34,7 @@ test('a customer can review their completed booking and the review appears on th
     ]);
 
     $this->get(route('bookings.show', $booking))->assertOk()->assertSee('Your review')->assertDontSee('Post review');
+    $this->get(route('bookings.index'))->assertOk()->assertDontSee('Leave a review');
     $this->get(route('services.show', $booking->service))
         ->assertOk()->assertSee($booking->customer->name)->assertSee('4 out of 5 stars')->assertSee('The provider arrived right on time.');
 });

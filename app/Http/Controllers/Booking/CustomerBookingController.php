@@ -16,6 +16,7 @@ class CustomerBookingController extends Controller
     {
         $bookings = $request->user()->customerBookings()
             ->with('service')
+            ->withExists('review')
             ->latest('id')
             ->paginate(12);
         $providerView = false;

@@ -12,7 +12,14 @@
                 <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($bookings as $booking)
                         <li class="rounded-2xl border border-stone-200 bg-white p-5">
-                            <x-booking-status :status="$booking->status" />
+                            <div class="flex flex-wrap items-center gap-2">
+                                <x-booking-status :status="$booking->status" />
+                                @if (! $providerView && ! $booking->review_exists)
+                                    @can('review', $booking)
+                                        <a href="{{ route('bookings.show', $booking) }}#booking-review-heading" class="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-900 hover:underline">Leave a review</a>
+                                    @endcan
+                                @endif
+                            </div>
                             <h2 class="mt-3 break-words text-xl font-semibold">
                                 <a href="{{ route($providerView ? 'provider.bookings.show' : 'bookings.show', $booking) }}" class="underline decoration-stone-300 underline-offset-4 hover:decoration-emerald-800">{{ $booking->service->title }}</a>
                             </h2>

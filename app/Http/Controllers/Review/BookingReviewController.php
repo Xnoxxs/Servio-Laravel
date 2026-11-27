@@ -10,7 +10,7 @@ use Illuminate\Http\RedirectResponse;
 
 class BookingReviewController extends Controller
 {
-    public function store(StoreBookingReviewRequest $request, Booking $booking): RedirectResponse
+    public function create(StoreBookingReviewRequest $request, Booking $booking): RedirectResponse
     {
         try {
             $booking->review()->create($request->validated());
